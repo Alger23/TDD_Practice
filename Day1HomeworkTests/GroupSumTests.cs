@@ -38,7 +38,7 @@ namespace Day1Homework.Tests
         }
 
         [TestMethod]
-        public void GroupSum_Should_Return_Correct_Summary_Result()
+        public void GroupSum_By_Cost_3_Items_Should_Return_Correct_Summary_Result()
         {
             // Arrange
             var property = "Cost";
@@ -56,6 +56,24 @@ namespace Day1Homework.Tests
         }
 
         [TestMethod]
+        public void GroupSum_By_Revenue_4_Items_Should_Return_Correct_Summary_Result()
+        {
+            // Arrange
+            var property = "Revenue";
+            var length = 4;
+            var expected = new[] { 50, 66, 60 };
+
+            var target = Substitute.For<IGroupHelper>();
+            target.GroupSum(_data, property, length).Returns(new[] { 50, 66, 60 });
+
+            // Act
+            var actual = target.GroupSum(_data, property, length);
+
+            // Assert
+            expected.ToExpectedObject().ShouldEqual(actual);
+        }
+
+        [TestMethod]
         public void GroupSum_Property_NotFound_Should_Throw_Exception()
         {
             // Arrange
@@ -63,11 +81,11 @@ namespace Day1Homework.Tests
             var length = 3;
 
             var target = Substitute.For<IGroupHelper>();
-            target.GroupSum(_data, Arg.Is<string>(x=> typeof(Product).GetProperties().All(p=> p.Name!=property)), length)
+            target.GroupSum(_data, Arg.Is<string>(x => typeof(Product).GetProperties().All(p => p.Name != property)), length)
                 .Throws(new ArgumentException(nameof(property)));
 
             // Act
-            Action actual = ()=> target.GroupSum(_data, property, length);
+            Action actual = () => target.GroupSum(_data, property, length);
 
             // Assert
             actual.ShouldThrow<ArgumentException>();
@@ -86,7 +104,7 @@ namespace Day1Homework.Tests
             var length = 3;
 
             var target = Substitute.For<IGroupHelper>();
-            target.GroupSum(data, Arg.Is<string>(x => typeof(Ball).GetProperty(property).PropertyType==typeof(string)), length)
+            target.GroupSum(data, Arg.Is<string>(x => typeof(Ball).GetProperty(property).PropertyType == typeof(string)), length)
                 .Throws(new UnsupportedTypeException(nameof(property)));
 
             // Act
@@ -115,6 +133,7 @@ namespace Day1Homework.Tests
             actual.ShouldThrow<ArgumentNullException>();
         }
     }
+
 
     public interface IGroupHelper
     {
