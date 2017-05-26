@@ -70,6 +70,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="GroupSumTests.cs" />
+    <Compile Include="GroupSumFakeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
