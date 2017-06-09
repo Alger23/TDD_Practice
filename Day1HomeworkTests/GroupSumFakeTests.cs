@@ -13,40 +13,25 @@ namespace Day1HomeworkTests
     [TestClass()]
     public class GroupSumFakeTests
     {
-        private static List<Product> _data;
-
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            _data = new List<Product>
-            {
-                new Product{Id=1,Cost=1,Revenue=11,SellPrice=21},
-                new Product{Id=2,Cost=2,Revenue=12,SellPrice=22},
-                new Product{Id=3,Cost=3,Revenue=13,SellPrice=23},
-                new Product{Id=4,Cost=4,Revenue=14,SellPrice=24},
-                new Product{Id=5,Cost=5,Revenue=15,SellPrice=25},
-                new Product{Id=6,Cost=6,Revenue=16,SellPrice=26},
-                new Product{Id=7,Cost=7,Revenue=17,SellPrice=27},
-                new Product{Id=8,Cost=8,Revenue=18,SellPrice=28},
-                new Product{Id=9,Cost=9,Revenue=19,SellPrice=29},
-                new Product{Id=10,Cost=10,Revenue=20,SellPrice=30},
-                new Product{Id=11,Cost=11,Revenue=21,SellPrice=31}
-            };
         }
 
         [TestMethod]
         public void GroupSum_By_Cost_3_Items_Should_Return_Correct_Summary_Result()
         {
             // Arrange
+            var products = GetProducts();
             var property = "Cost";
             var length = 3;
             var expected = new [] {6,15,24,21 };
 
             var target = Substitute.For<IGroupHelper>();
-            target.GroupSum(_data, property, length).Returns(new[] {6, 15, 24, 21});
+            target.GroupSum(products, property, length).Returns(new[] {6, 15, 24, 21});
 
             // Act
-            var actual = target.GroupSum(_data, property, length);
+            var actual = target.GroupSum(products, property, length);
 
             // Assert
             expected.ToExpectedObject().ShouldEqual(actual);
@@ -56,15 +41,16 @@ namespace Day1HomeworkTests
         public void GroupSum_By_Revenue_4_Items_Should_Return_Correct_Summary_Result()
         {
             // Arrange
+            var products = GetProducts();
             var property = "Revenue";
             var length = 4;
             var expected = new[] { 50, 66, 60 };
 
             var target = Substitute.For<IGroupHelper>();
-            target.GroupSum(_data, property, length).Returns(new[] { 50, 66, 60 });
+            target.GroupSum(products, property, length).Returns(new[] { 50, 66, 60 });
 
             // Act
-            var actual = target.GroupSum(_data, property, length);
+            var actual = target.GroupSum(products, property, length);
 
             // Assert
             expected.ToExpectedObject().ShouldEqual(actual);
@@ -74,15 +60,16 @@ namespace Day1HomeworkTests
         public void GroupSum_Property_NotFound_Should_Throw_Exception()
         {
             // Arrange
+            var products = GetProducts();
             var property = "name_not_exist";
             var length = 3;
 
             var target = Substitute.For<IGroupHelper>();
-            target.GroupSum(_data, Arg.Is<string>(x => typeof(Product).GetProperties().All(p => p.Name != property)), length)
+            target.GroupSum(products, Arg.Is<string>(x => typeof(Product).GetProperties().All(p => p.Name != property)), length)
                 .Throws(new ArgumentException(nameof(property)));
 
             // Act
-            Action actual = () => target.GroupSum(_data, property, length);
+            Action actual = () => target.GroupSum(products, property, length);
 
             // Assert
             actual.ShouldThrow<ArgumentException>();
@@ -128,6 +115,24 @@ namespace Day1HomeworkTests
 
             // Assert
             actual.ShouldThrow<ArgumentNullException>();
+        }
+
+        public IList<Product> GetProducts()
+        {
+            return new List<Product>
+            {
+                new Product{Id=1,Cost=1,Revenue=11,SellPrice=21},
+                new Product{Id=2,Cost=2,Revenue=12,SellPrice=22},
+                new Product{Id=3,Cost=3,Revenue=13,SellPrice=23},
+                new Product{Id=4,Cost=4,Revenue=14,SellPrice=24},
+                new Product{Id=5,Cost=5,Revenue=15,SellPrice=25},
+                new Product{Id=6,Cost=6,Revenue=16,SellPrice=26},
+                new Product{Id=7,Cost=7,Revenue=17,SellPrice=27},
+                new Product{Id=8,Cost=8,Revenue=18,SellPrice=28},
+                new Product{Id=9,Cost=9,Revenue=19,SellPrice=29},
+                new Product{Id=10,Cost=10,Revenue=20,SellPrice=30},
+                new Product{Id=11,Cost=11,Revenue=21,SellPrice=31}
+            };
         }
     }
 

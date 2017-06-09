@@ -10,12 +10,87 @@ namespace Day1HomeworkTests
     [TestClass]
     public class GroupSumTests
     {
-        private static List<Product> _data;
 
         [ClassInitialize]
         public static void ClassInit(TestContext context)
         {
-            _data = new List<Product>
+        }
+
+        [TestMethod]
+        public void GroupSum_By_Cost_3_Items_Should_Return_Correct_Summary_Result()
+        {
+            // Arrange
+            var products = GetProducts();
+            var property = "Cost";
+            var length = 3;
+            var expected = new[] { 6, 15, 24, 21 };
+
+            var target = new GroupHelper();
+
+            // Act
+            var actual = target.GroupSum(products, property, length).ToArray();
+
+            // Assert
+            expected.ToExpectedObject().ShouldEqual(actual);
+        }
+
+        [TestMethod]
+        public void GroupSum_By_Revenue_4_Items_Should_Return_Correct_Summary_Result()
+        {
+            // Arrange
+            var products = GetProducts();
+            var property = "Revenue";
+            var length = 4;
+            var expected = new[] { 50, 66, 60 };
+
+            IGroupHelper target = new GroupHelper();
+
+            // Act
+            var actual = target.GroupSum(products, property, length).ToArray();
+
+            // Assert
+            expected.ToExpectedObject().ShouldEqual(actual);
+        }
+
+        [TestMethod]
+        public void GroupSum_By_CostFunc_3_Items_Should_Return_Correct_Summary_Result()
+        {
+            // Arrange
+            var products = GetProducts();
+            Func<Product, int> getCostFunc = o => (int) o.Cost;
+            var length = 3;
+            var expected = new[] { 6, 15, 24, 21 };
+
+            var target = new GroupHelper();
+
+            // Act
+            var actual = target.GroupSum(products, getCostFunc, length).ToArray();
+
+            // Assert
+            expected.ToExpectedObject().ShouldEqual(actual);
+        }
+
+        [TestMethod]
+        public void GroupSum_By_RevenueFunc_4_Items_Should_Return_Correct_Summary_Result()
+        {
+            // Arrange
+            var products = GetProducts();
+            Func<Product, int> getRevenue = o => (int)o.Revenue;
+            var length = 4;
+            var expected = new[] { 50, 66, 60 };
+
+            IGroupHelper target = new GroupHelper();
+
+            // Act
+            var actual = target.GroupSum(products, getRevenue, length).ToArray();
+
+            // Assert
+            expected.ToExpectedObject().ShouldEqual(actual);
+        }
+
+        public IList<Product> GetProducts()
+        {
+            return new List<Product>
             {
                 new Product{Id=1,Cost=1,Revenue=11,SellPrice=21},
                 new Product{Id=2,Cost=2,Revenue=12,SellPrice=22},
@@ -30,83 +105,5 @@ namespace Day1HomeworkTests
                 new Product{Id=11,Cost=11,Revenue=21,SellPrice=31}
             };
         }
-
-        [TestMethod]
-        public void GroupSum_By_Cost_3_Items_Should_Return_Correct_Summary_Result()
-        {
-            // Arrange
-            var property = "Cost";
-            var length = 3;
-            var expected = new[] { 6, 15, 24, 21 };
-
-            var target = new GroupHelper();
-            //var target = Substitute.For<IGroupHelper>();
-            //target.GroupSum(_data, property, length).Returns(new[] {6, 15, 24, 21});
-
-            // Act
-            var actual = target.GroupSum(_data, property, length).ToArray();
-
-            // Assert
-            expected.ToExpectedObject().ShouldEqual(actual);
-        }
-
-        [TestMethod]
-        public void GroupSum_By_Revenue_4_Items_Should_Return_Correct_Summary_Result()
-        {
-            // Arrange
-            var property = "Revenue";
-            var length = 4;
-            var expected = new[] { 50, 66, 60 };
-
-            IGroupHelper target = new GroupHelper();
-            //var target = Substitute.For<IGroupHelper>();
-            //target.GroupSum(_data, property, length).Returns(new[] { 50, 66, 60 });
-
-            // Act
-            var actual = target.GroupSum(_data, property, length).ToArray();
-
-            // Assert
-            expected.ToExpectedObject().ShouldEqual(actual);
-        }
-
-        [TestMethod]
-        public void GroupSum_By_CostFunc_3_Items_Should_Return_Correct_Summary_Result()
-        {
-            // Arrange
-            Func<Product, int> getCostFunc = o => (int) o.Cost;
-            var length = 3;
-            var expected = new[] { 6, 15, 24, 21 };
-
-            var target = new GroupHelper();
-            //var target = Substitute.For<IGroupHelper>();
-            //target.GroupSum(_data, property, length).Returns(new[] {6, 15, 24, 21});
-
-            // Act
-            var actual = target.GroupSum(_data, getCostFunc, length).ToArray();
-
-            // Assert
-            expected.ToExpectedObject().ShouldEqual(actual);
-        }
-
-        [TestMethod]
-        public void GroupSum_By_RevenueFunc_4_Items_Should_Return_Correct_Summary_Result()
-        {
-            // Arrange
-            Func<Product, int> getRevenue = o => (int)o.Revenue;
-            var length = 4;
-            var expected = new[] { 50, 66, 60 };
-
-            IGroupHelper target = new GroupHelper();
-            //var target = Substitute.For<IGroupHelper>();
-            //target.GroupSum(_data, property, length).Returns(new[] { 50, 66, 60 });
-
-            // Act
-            var actual = target.GroupSum(_data, getRevenue, length).ToArray();
-
-            // Assert
-            expected.ToExpectedObject().ShouldEqual(actual);
-        }
-
-
     }
 }
