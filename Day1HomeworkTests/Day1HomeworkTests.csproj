@@ -69,6 +69,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="SummaryExtension.cs" />
     <Compile Include="GroupSumTests.cs" />
     <Compile Include="GroupSumFakeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

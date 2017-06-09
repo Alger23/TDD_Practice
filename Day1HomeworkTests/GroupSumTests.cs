@@ -22,13 +22,19 @@ namespace Day1HomeworkTests
             // Arrange
             var products = GetProducts();
             var property = "Cost";
-            var length = 3;
-            var expected = new[] { 6, 15, 24, 21 };
+            Func<Product, int> getCostFunc = o =>
+            {
+                var t = o.GetType();
+                var p = t.GetProperty(property);
 
-            var target = new GroupHelper();
+                return (int)Convert.ChangeType(p.GetValue(o), TypeCode.Int32);
+            };
+
+            var length = 3;
+            var expected = new List<int> { 6, 15, 24, 21 };
 
             // Act
-            var actual = target.GroupSum(products, property, length).ToArray();
+            var actual = products.GetSubTotals(getCostFunc, length).ToList();
 
             // Assert
             expected.ToExpectedObject().ShouldEqual(actual);
@@ -40,13 +46,18 @@ namespace Day1HomeworkTests
             // Arrange
             var products = GetProducts();
             var property = "Revenue";
-            var length = 4;
-            var expected = new[] { 50, 66, 60 };
+            Func<Product, int> getRevenueFunc = o =>
+            {
+                var t = o.GetType();
+                var p = t.GetProperty(property);
 
-            IGroupHelper target = new GroupHelper();
+                return (int)Convert.ChangeType(p.GetValue(o), TypeCode.Int32);
+            };
+            var length = 4;
+            var expected = new List<int> { 50, 66, 60 };
 
             // Act
-            var actual = target.GroupSum(products, property, length).ToArray();
+            var actual = products.GetSubTotals(getRevenueFunc, length).ToList();
 
             // Assert
             expected.ToExpectedObject().ShouldEqual(actual);
@@ -57,14 +68,12 @@ namespace Day1HomeworkTests
         {
             // Arrange
             var products = GetProducts();
-            Func<Product, int> getCostFunc = o => (int) o.Cost;
+            Func<Product, int> getCostFunc = o => (int)o.Cost;
             var length = 3;
-            var expected = new[] { 6, 15, 24, 21 };
-
-            var target = new GroupHelper();
+            var expected = new List<int> { 6, 15, 24, 21 };
 
             // Act
-            var actual = target.GroupSum(products, getCostFunc, length).ToArray();
+            var actual = products.GetSubTotals(getCostFunc, length).ToList();
 
             // Assert
             expected.ToExpectedObject().ShouldEqual(actual);
@@ -77,12 +86,12 @@ namespace Day1HomeworkTests
             var products = GetProducts();
             Func<Product, int> getRevenue = o => (int)o.Revenue;
             var length = 4;
-            var expected = new[] { 50, 66, 60 };
+            var expected = new List<int> { 50, 66, 60 };
 
             IGroupHelper target = new GroupHelper();
 
             // Act
-            var actual = target.GroupSum(products, getRevenue, length).ToArray();
+            var actual = products.GetSubTotals(getRevenue, length).ToList();
 
             // Assert
             expected.ToExpectedObject().ShouldEqual(actual);
